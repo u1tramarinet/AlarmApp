@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">アラームアプリ</string>
+
+    <!-- 画面１ -->
+    <string name="current_setting">現在の設定</string>
+    <string name="notification_time">通知時間 \:</string>
+    <string name="second">%d秒</string>
+    <string name="second_sample">○○秒</string>
+    <string name="state">状態 \:</string>
+    <string name="state_notification_executing">通知実行中</string>
+    <string name="state_notification_suspended">通知停止中</string>
+    <string name="notification_start">通知開始</string>
+    <string name="notification_stop">通知終了</string>
+    <string name="warning_in_running">通知実行中に設定は使用できません</string>
+
+    <!-- メニュー・ダイアログ -->
+    <string name="notification_time_setting">通知時間設定</string>
+    <string name="dialog_ok">OK</string>
+
+    <string name="dialog_title">アラーム！</string>
+    <string name="dialog_message">設定時間になりました。</string>
+    <string name="do_not_re_notify">再通知しない</string>
+    <string name="resetting">再設定</string>
+    <string name="re_notify">再通知する</string>
 </resources>
