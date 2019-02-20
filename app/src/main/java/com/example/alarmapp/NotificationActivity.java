@@ -9,6 +9,7 @@ import android.widget.Button;
 
 public class NotificationActivity extends AppCompatActivity {
     private static final String TAG = NotificationActivity.class.getSimpleName();
+    private AlarmApplication mApplication;
     private int mCurrentSecond = 0;
     private Button mButtonCancel;
     private Button mButtonSetting;
@@ -19,6 +20,7 @@ public class NotificationActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate/in");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        mApplication = (AlarmApplication)getApplication();
         initComponents();
         Intent intent = getIntent();
         if (intent != null) {
@@ -67,6 +69,7 @@ public class NotificationActivity extends AppCompatActivity {
      */
     private void cancelNextAlarm() {
         Log.d(TAG, "cancelNextAlarm/in");
+        mApplication.updateState(false);
         finish();
         Log.d(TAG, "cancelNextAlarm/out");
     }
@@ -76,6 +79,7 @@ public class NotificationActivity extends AppCompatActivity {
      */
     private void moveToTopActivity() {
         Log.d(TAG, "moveToTopActivity/in");
+        mApplication.updateState(false);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -90,6 +94,7 @@ public class NotificationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmService.class);
         intent.putExtra(AlarmService.KEY_ALARM_SECOND, mCurrentSecond);
         startService(intent);
+        finish();
         Log.d(TAG, "startNextAlarm/out");
     }
 }

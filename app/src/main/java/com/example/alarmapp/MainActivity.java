@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity implements NotificationSettingDialogFragment.DialogActionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private int mCurrentSecond;
@@ -25,18 +26,43 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     private Button mButtonStart;
     private Button mButtonStop;
 
+    private AlarmApplication mApplication;
+    private AlarmStateObserver mObserver = new AlarmStateObserver() {
+        @Override
+        public void update(AlarmApplication application) {
+            Log.d(TAG, "update/in");
+            updateState(application.isRunning());
+            Log.d(TAG, "update/out");
+        }
+    };
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate/in");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        mApplication = (AlarmApplication)getApplication();
+        mApplication.addObserver(mObserver);
         initComponents();
         updateSecond();
         updateState(false);
+        Log.d(TAG, "onCreate/out");
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy/in");
+        super.onDestroy();
+        mApplication.removeObserver(mObserver);
+        Log.d(TAG, "onDestroy/out");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu");
@@ -45,17 +71,16 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
         switch (item.getItemId()) {
             case R.id.notification_time_setting:
                 Log.d(TAG, "Pressed time setting");
-                if (mIsRunning) {
-                    Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
-                } else {
-                    showSettingDialog();
-                }
+                showSettingDialog();
                 return true;
             default:
                 Log.d(TAG, "Pressed unknown option");
@@ -63,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void onDialogPositiveClick() {
         Log.d(TAG, "onDialogPositiveClick/in");
@@ -70,11 +98,15 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         Log.d(TAG, "onDialogPositiveClick/out");
     }
 
+    /**
+     *
+     */
     private void initComponents() {
         Log.d(TAG, "initialize/in");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mTextViewSecond = (TextView) findViewById(R.id.text_second);
         mTextViewState = (TextView) findViewById(R.id.text_state);
-
         mButtonStart = (Button) findViewById(R.id.button_start);
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,28 +129,46 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         Log.d(TAG, "initialize/out");
     }
 
+    /**
+     *
+     */
     private void startAlarm() {
         Log.d(TAG, "startAlarm/in");
-        updateState(true);
         Intent intent = new Intent(this, AlarmService.class);
         intent.putExtra(AlarmService.KEY_ALARM_SECOND, mCurrentSecond);
         startService(intent);
+        updateState(true);
         Log.d(TAG, "startAlarm/out");
     }
 
+    /**
+     *
+     */
     private void stopAlarm() {
         Log.d(TAG, "stopAlarm/in");
+        Intent intent = new Intent(this, AlarmService.class);
+        stopService(intent);
         updateState(false);
         Log.d(TAG, "stopAlarm/out");
     }
 
+    /**
+     *
+     */
     private void showSettingDialog() {
         Log.d(TAG, "showSettingDialog/in");
+        if (mIsRunning) {
+            Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
+            return;
+        }
         DialogFragment dialog = NotificationSettingDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), NotificationSettingDialogFragment.class.getSimpleName());
         Log.d(TAG, "showSettingDialog/out");
     }
 
+    /**
+     *
+     */
     private void updateSecond() {
         Log.d(TAG, "updateSecond/in");
         Resources res = getResources();
@@ -128,14 +178,20 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         Log.d(TAG, "updateSecond/out");
     }
 
+    /**
+     *
+     * @param isRunning
+     */
     private void updateState(boolean isRunning) {
         Log.d(TAG, "updateState/in isRunning=" + isRunning);
         mIsRunning = isRunning;
+
         int textId = R.string.state_notification_suspended;
         if (mIsRunning) {
             textId = R.string.state_notification_executing;
         }
         mTextViewState.setText(textId);
+
         mButtonStart.setEnabled(!mIsRunning);
         mButtonStop.setEnabled(mIsRunning);
         Log.d(TAG, "updateState/out");

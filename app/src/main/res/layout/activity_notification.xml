@@ -6,6 +6,7 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:elevation="4dp"
+    android:background="@android:color/transparent"
     tools:context=".NotificationActivity">
 
     <TextView
