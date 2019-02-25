@@ -1,19 +1,52 @@
 package com.example.alarmapp;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
+
+import com.example.alarmapp.observer.AlarmStateObserver;
+import com.example.alarmapp.state.AlarmState;
+import com.example.alarmapp.state.IdleState;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmApplication extends Application {
     private static final String TAG = AlarmApplication.class.getSimpleName();
-    private boolean mIsRunning = false;
+    private AlarmState mState = IdleState.getInstance();
     private List<AlarmStateObserver> observers = new ArrayList<>();
+
+    public void startAlarm(Context context, int sec) {
+        Log.d(TAG, "startAlarm/in");
+        mState.start(context, sec);
+        Log.d(TAG, "startAlarm/out");
+    }
+
+    public void stopAlarm(Context context) {
+        Log.d(TAG, "stopAlarm/in");
+        mState.stop(context);
+        Log.d(TAG, "stopAlarm/out");
+    }
+
+    public void updateState(AlarmState state) {
+        Log.d(TAG, "updateState/in old=" + mState + "-> new=" + state);
+        mState = state;
+        notifyObservers();
+        Log.d(TAG, "updateState/out");
+    }
+
+    public void notifyObservers() {
+        Log.d(TAG, "notifyObservers/in");
+        for (AlarmStateObserver observer : observers) {
+            observer.update(mState);
+        }
+        Log.d(TAG, "notifyObservers/out");
+    }
 
     public void addObserver(AlarmStateObserver observer) {
         Log.d(TAG, "addObserver/in");
         observers.add(observer);
+        notifyObservers();
         Log.d(TAG, "addObserver/out");
     }
 
@@ -21,25 +54,5 @@ public class AlarmApplication extends Application {
         Log.d(TAG, "removeObserver/in");
         observers.remove(observer);
         Log.d(TAG, "removeObserver/out");
-    }
-
-    public void notifyObservers() {
-        Log.d(TAG, "notifyObservers/in");
-        for (AlarmStateObserver observer : observers) {
-            observer.update(this);
-        }
-        Log.d(TAG, "notifyObservers/out");
-    }
-
-    public boolean isRunning() {
-        Log.d(TAG, "isRunning result=" + mIsRunning);
-        return mIsRunning;
-    }
-
-    public void updateState(boolean isRunning) {
-        Log.d(TAG, "updateState/in");
-        mIsRunning = isRunning;
-        notifyObservers();
-        Log.d(TAG, "updateState/out");
     }
 }

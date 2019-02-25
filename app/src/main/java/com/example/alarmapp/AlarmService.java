@@ -42,8 +42,6 @@ public class AlarmService extends Service {
             return START_NOT_STICKY;
         }
 
-        AlarmApplication application = (AlarmApplication)getApplication();
-        application.updateState(true);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {

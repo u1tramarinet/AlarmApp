@@ -1,6 +1,5 @@
 package com.example.alarmapp;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,25 +12,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.alarmapp.observer.AlarmStateObserver;
+import com.example.alarmapp.state.AlarmState;
 
 
 public class MainActivity extends AppCompatActivity implements NotificationSettingDialogFragment.DialogActionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private int mCurrentSecond;
-    private boolean mIsRunning = false;
 
     private TextView mTextViewSecond;
     private TextView mTextViewState;
-    private Button mButtonStart;
-    private Button mButtonStop;
 
     private AlarmApplication mApplication;
     private AlarmStateObserver mObserver = new AlarmStateObserver() {
         @Override
-        public void update(AlarmApplication application) {
+        public void update(AlarmState state) {
             Log.d(TAG, "update/in");
-            updateState(application.isRunning());
+            updateState(state.isRunning());
             Log.d(TAG, "update/out");
         }
     };
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mApplication = (AlarmApplication)getApplication();
-        mApplication.addObserver(mObserver);
         initComponents();
         updateSecond();
         updateState(false);
@@ -53,10 +50,22 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mApplication.addObserver(mObserver);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mApplication.removeObserver(mObserver);
+    }
+
+    @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy/in");
         super.onDestroy();
-        mApplication.removeObserver(mObserver);
+        // NOP
         Log.d(TAG, "onDestroy/out");
     }
 
@@ -107,22 +116,22 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         setSupportActionBar(toolbar);
         mTextViewSecond = (TextView) findViewById(R.id.text_second);
         mTextViewState = (TextView) findViewById(R.id.text_state);
-        mButtonStart = (Button) findViewById(R.id.button_start);
-        mButtonStart.setOnClickListener(new View.OnClickListener() {
+        Button startButton = (Button) findViewById(R.id.button_start);
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onStartClick/in");
-                startAlarm();
+                mApplication.startAlarm(MainActivity.this, mCurrentSecond);
                 Log.d(TAG, "onStartClick/out");
             }
         });
 
-        mButtonStop = (Button) findViewById(R.id.button_stop);
-        mButtonStop.setOnClickListener(new View.OnClickListener() {
+        Button stopButton = (Button) findViewById(R.id.button_stop);
+        stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onStopClick/in");
-                stopAlarm();
+                mApplication.stopAlarm(MainActivity.this);
                 Log.d(TAG, "onStopClick/out");
             }
         });
@@ -132,35 +141,12 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     /**
      *
      */
-    private void startAlarm() {
-        Log.d(TAG, "startAlarm/in");
-        Intent intent = new Intent(this, AlarmService.class);
-        intent.putExtra(AlarmService.KEY_ALARM_SECOND, mCurrentSecond);
-        startService(intent);
-        updateState(true);
-        Log.d(TAG, "startAlarm/out");
-    }
-
-    /**
-     *
-     */
-    private void stopAlarm() {
-        Log.d(TAG, "stopAlarm/in");
-        Intent intent = new Intent(this, AlarmService.class);
-        stopService(intent);
-        updateState(false);
-        Log.d(TAG, "stopAlarm/out");
-    }
-
-    /**
-     *
-     */
     private void showSettingDialog() {
         Log.d(TAG, "showSettingDialog/in");
-        if (mIsRunning) {
-            Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (mIsRunning) {
+//            Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         DialogFragment dialog = NotificationSettingDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), NotificationSettingDialogFragment.class.getSimpleName());
         Log.d(TAG, "showSettingDialog/out");
@@ -184,16 +170,12 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
      */
     private void updateState(boolean isRunning) {
         Log.d(TAG, "updateState/in isRunning=" + isRunning);
-        mIsRunning = isRunning;
 
         int textId = R.string.state_notification_suspended;
-        if (mIsRunning) {
+        if (isRunning) {
             textId = R.string.state_notification_executing;
         }
         mTextViewState.setText(textId);
-
-        mButtonStart.setEnabled(!mIsRunning);
-        mButtonStop.setEnabled(mIsRunning);
         Log.d(TAG, "updateState/out");
     }
 }

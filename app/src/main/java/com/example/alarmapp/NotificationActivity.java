@@ -11,9 +11,26 @@ public class NotificationActivity extends AppCompatActivity {
     private static final String TAG = NotificationActivity.class.getSimpleName();
     private AlarmApplication mApplication;
     private int mCurrentSecond = 0;
-    private Button mButtonCancel;
-    private Button mButtonSetting;
-    private Button mButtonRedo;
+
+    private View.OnClickListener mButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick/in");
+            mApplication.stopAlarm(NotificationActivity.this);
+
+            switch (v.getId()) {
+                case R.id.button_resetting:
+                    Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.button_redo:
+                    mApplication.startAlarm(NotificationActivity.this, mCurrentSecond);
+                    break;
+            }
+            finish();
+            Log.d(TAG, "onClick/out");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,69 +49,14 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void initComponents() {
         Log.d(TAG, "initComponents/in");
-        mButtonCancel = (Button) findViewById(R.id.button_cancel_redo);
-        mButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onCancelClick/in");
-                cancelNextAlarm();
-                Log.d(TAG, "onCancelClick/out");
-            }
-        });
+        Button cancelButton = (Button) findViewById(R.id.button_cancel_redo);
+        cancelButton.setOnClickListener(mButtonClickListener);
 
-        mButtonSetting = (Button) findViewById(R.id.button_resetting);
-        mButtonSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onSettingClick/in");
-                moveToTopActivity();
-                Log.d(TAG, "onSettingClick/out");
-            }
-        });
+        Button resetButton = (Button) findViewById(R.id.button_resetting);
+        resetButton.setOnClickListener(mButtonClickListener);
 
-        mButtonRedo = (Button) findViewById(R.id.button_redo);
-        mButtonRedo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onRedoClick/in");
-                startNextAlarm();
-                Log.d(TAG, "onRedoClick/out");
-            }
-        });
+        Button restartButton = (Button) findViewById(R.id.button_redo);
+        restartButton.setOnClickListener(mButtonClickListener);
         Log.d(TAG, "initComponents/out");
-    }
-
-    /**
-     *
-     */
-    private void cancelNextAlarm() {
-        Log.d(TAG, "cancelNextAlarm/in");
-        mApplication.updateState(false);
-        finish();
-        Log.d(TAG, "cancelNextAlarm/out");
-    }
-
-    /**
-     *
-     */
-    private void moveToTopActivity() {
-        Log.d(TAG, "moveToTopActivity/in");
-        mApplication.updateState(false);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        Log.d(TAG, "moveToTopActivity/out");
-    }
-
-    /**
-     *
-     */
-    private void startNextAlarm() {
-        Log.d(TAG, "startNextAlarm/in");
-        Intent intent = new Intent(this, AlarmService.class);
-        intent.putExtra(AlarmService.KEY_ALARM_SECOND, mCurrentSecond);
-        startService(intent);
-        finish();
-        Log.d(TAG, "startNextAlarm/out");
     }
 }
