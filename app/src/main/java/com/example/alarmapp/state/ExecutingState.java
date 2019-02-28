@@ -18,12 +18,18 @@ public class ExecutingState implements AlarmState {
         return singleton;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start(Context context, int sec) {
         Log.d(TAG, "start NOP now=" + singleton);
         // NOP
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stop(Context context) {
         Log.d(TAG, "stop/in");
@@ -32,18 +38,25 @@ public class ExecutingState implements AlarmState {
         Log.d(TAG, "stop/out");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void setting(Context context) {
-        Log.d(TAG, "setting/in");
-        Toast.makeText(context, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "setting/out");
+    public boolean canOpenSetting() {
+        return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isRunning() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return TAG;

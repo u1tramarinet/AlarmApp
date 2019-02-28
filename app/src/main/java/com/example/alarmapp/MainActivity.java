@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alarmapp.observer.AlarmStateObserver;
 import com.example.alarmapp.state.AlarmState;
@@ -45,22 +46,34 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
         mApplication = (AlarmApplication)getApplication();
         initComponents();
         updateSecond();
-        updateState(false);
         Log.d(TAG, "onCreate/out");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onStart() {
+        Log.d(TAG, "onStart/in");
         super.onStart();
         mApplication.addObserver(mObserver);
+        Log.d(TAG, "onStart/out");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onStop() {
+        Log.d(TAG, "onStop/in");
         super.onStop();
         mApplication.removeObserver(mObserver);
+        Log.d(TAG, "onStop/out");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy/in");
@@ -143,12 +156,12 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
      */
     private void showSettingDialog() {
         Log.d(TAG, "showSettingDialog/in");
-//        if (mIsRunning) {
-//            Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-        DialogFragment dialog = NotificationSettingDialogFragment.newInstance();
-        dialog.show(getSupportFragmentManager(), NotificationSettingDialogFragment.class.getSimpleName());
+        if (mApplication.canOpenSetting()) {
+            DialogFragment dialog = NotificationSettingDialogFragment.newInstance();
+            dialog.show(getSupportFragmentManager(), NotificationSettingDialogFragment.class.getSimpleName());
+        } else {
+            Toast.makeText(this, R.string.warning_in_running, Toast.LENGTH_SHORT).show();
+        }
         Log.d(TAG, "showSettingDialog/out");
     }
 

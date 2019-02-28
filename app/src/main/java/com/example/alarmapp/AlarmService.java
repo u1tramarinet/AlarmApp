@@ -46,7 +46,7 @@ public class AlarmService extends Service {
             @Override
             public void run() {
                 startDialogActivity();
-                stopSelf();
+//                stopSelf();
             }
         }, mAlarmSecond * 100); // 1 sec = 100 ms
         return START_NOT_STICKY;
