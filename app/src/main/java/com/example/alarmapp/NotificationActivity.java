@@ -19,11 +19,14 @@ public class NotificationActivity extends AppCompatActivity {
             mApplication.stopAlarm(NotificationActivity.this);
 
             switch (v.getId()) {
-                case R.id.button_resetting:
+                case R.id.button_do_not_restart:
+                    // NOP
+                    break;
+                case R.id.button_reset:
                     Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
                     startActivity(intent);
                     break;
-                case R.id.button_redo:
+                case R.id.button_restart:
                     mApplication.startAlarm(NotificationActivity.this, mCurrentSecond);
                     break;
             }
@@ -32,6 +35,9 @@ public class NotificationActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate/in");
@@ -47,15 +53,18 @@ public class NotificationActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate/out");
     }
 
+    /**
+     *
+     */
     private void initComponents() {
         Log.d(TAG, "initComponents/in");
-        Button cancelButton = (Button) findViewById(R.id.button_cancel_redo);
+        Button cancelButton = (Button) findViewById(R.id.button_do_not_restart);
         cancelButton.setOnClickListener(mButtonClickListener);
 
-        Button resetButton = (Button) findViewById(R.id.button_resetting);
+        Button resetButton = (Button) findViewById(R.id.button_reset);
         resetButton.setOnClickListener(mButtonClickListener);
 
-        Button restartButton = (Button) findViewById(R.id.button_redo);
+        Button restartButton = (Button) findViewById(R.id.button_restart);
         restartButton.setOnClickListener(mButtonClickListener);
         Log.d(TAG, "initComponents/out");
     }

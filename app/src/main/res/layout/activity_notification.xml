@@ -26,7 +26,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_cancel_redo"
+            android:id="@+id/button_do_not_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -34,7 +34,7 @@
             style="?buttonBarButtonStyle"/>
 
         <Button
-            android:id="@+id/button_resetting"
+            android:id="@+id/button_reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -42,7 +42,7 @@
             style="?buttonBarButtonStyle"/>
 
         <Button
-            android:id="@+id/button_redo"
+            android:id="@+id/button_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

@@ -11,6 +11,12 @@ public class AlarmService extends Service {
     public static final String KEY_ALARM_SECOND = "alarm_second";
     private Handler mHandler = new Handler();
     private int mAlarmSecond;
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            startDialogActivity();
+        }
+    };
 
     public AlarmService() {
     }
@@ -42,13 +48,7 @@ public class AlarmService extends Service {
             return START_NOT_STICKY;
         }
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startDialogActivity();
-                stopSelf();
-            }
-        }, mAlarmSecond * 100); // 1 sec = 100 ms
+        mHandler.postDelayed(mRunnable, mAlarmSecond * 1000);
         return START_NOT_STICKY;
     }
 
@@ -69,6 +69,7 @@ public class AlarmService extends Service {
     public void onDestroy() {
         Log.d(TAG, "onDestroy/in");
         super.onDestroy();
+        mHandler.removeCallbacks(mRunnable);
         Log.d(TAG, "onDestroy/out");
     }
 
