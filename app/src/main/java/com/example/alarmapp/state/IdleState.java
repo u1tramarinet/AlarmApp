@@ -7,14 +7,24 @@ import android.util.Log;
 import com.example.alarmapp.AlarmService;
 
 /**
- *
+ * アラームが停止中である状態
  */
 public class IdleState implements AlarmState {
     private static final String TAG = IdleState.class.getSimpleName();
+    /**
+     * このクラスのインスタンスは１つだけ
+     */
     private static IdleState singleton = new IdleState();
 
+    /**
+     * コンストラクタ
+     */
     private IdleState(){}
 
+    /**
+     * このクラスのインスタンスを取得する
+     * @return このクラスのインスタンス
+     */
     public static AlarmState getInstance() {
         return singleton;
     }
@@ -36,16 +46,9 @@ public class IdleState implements AlarmState {
      */
     @Override
     public void stop(Context context) {
-        Log.d(TAG, "stop NOP now=" + singleton);
+        Log.d(TAG, "stop/in");
         // NOP
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean canOpenSetting() {
-        return true;
+        Log.d(TAG, "stop/out");
     }
 
     /**

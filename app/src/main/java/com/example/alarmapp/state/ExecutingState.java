@@ -8,12 +8,29 @@ import android.widget.Toast;
 import com.example.alarmapp.AlarmService;
 import com.example.alarmapp.R;
 
+/**
+ * アラームが実行中である状態
+ */
 public class ExecutingState implements AlarmState {
     private static final String TAG = ExecutingState.class.getSimpleName();
+    /**
+     * このクラスのインスタンスは１つだけ
+     */
     private static ExecutingState singleton = new ExecutingState();
 
+    /**
+     * このクラスのインスタンスを２つ以上生成させないため、コンストラクタはprivate指定
+     * ※参考：シングルトンパターン
+     */
     private ExecutingState() {}
 
+    /**
+     * このクラスのインスタンスを取得する
+     * @return このクラスのインスタンス
+     *
+     * 他の状態を表すクラスと同列に扱えるように、返り値の型は親クラス
+     * ※参考：ポリモーフィズム
+     */
     public static AlarmState getInstance() {
         return singleton;
     }
@@ -36,14 +53,6 @@ public class ExecutingState implements AlarmState {
         Intent intent = new Intent(context, AlarmService.class);
         context.stopService(intent);
         Log.d(TAG, "stop/out");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean canOpenSetting() {
-        return false;
     }
 
     /**

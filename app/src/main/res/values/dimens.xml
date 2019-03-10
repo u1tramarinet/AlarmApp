@@ -3,8 +3,16 @@
     <dimen name="radius_button">10dp</dimen>
     <dimen name="margin_common">10dp</dimen>
     <dimen name="margin_edge">30dp</dimen>
+    <dimen name="margin_top">150dp</dimen>
     <dimen name="margin_horizontal">30dp</dimen>
     <dimen name="margin_vertical">60dp</dimen>
     <dimen name="padding_horizontal">20dp</dimen>
     <dimen name="padding_vertical">5dp</dimen>
+    <dimen name="margin_large">30dp</dimen>
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+
+    <dimen name="font_large">24sp</dimen>
+    <dimen name="font_medium">18sp</dimen>
+    <dimen name="font_small">14sp</dimen>
 </resources>

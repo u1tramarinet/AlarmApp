@@ -17,15 +17,31 @@ import android.widget.Toast;
 import com.example.alarmapp.observer.AlarmStateObserver;
 import com.example.alarmapp.state.AlarmState;
 
-
+/**
+ * メインアクティビティ
+ */
 public class MainActivity extends AppCompatActivity implements NotificationSettingDialogFragment.DialogActionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
+    /**
+     * アラーム設定秒数
+     */
     private int mCurrentSecond;
-
-    private TextView mTextViewSecond;
+    /**
+     * 通知時間を表示するテキストビュー
+     */
+    private TextView mTextViewNotificationTime;
+    /**
+     * アラームの状態を表示するテキストビュー
+     */
     private TextView mTextViewState;
-
+    /**
+     * アラームのアプリケーション
+     */
     private AlarmApplication mApplication;
+
+    /**
+     * 通知状態を管理しているApplicationから変更通知を受け取るためのオブザーバ
+     */
     private AlarmStateObserver mObserver = new AlarmStateObserver() {
         @Override
         public void update(AlarmState state) {
@@ -111,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     }
 
     /**
-     *
+     * ダイアログでOKを押した際の動作
      */
     @Override
     public void onDialogPositiveClick() {
@@ -121,15 +137,15 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     }
 
     /**
-     *
+     * コンポーネントの初期処理
      */
     private void initComponents() {
         Log.d(TAG, "initialize/in");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mTextViewSecond = (TextView) findViewById(R.id.text_second);
-        mTextViewState = (TextView) findViewById(R.id.text_state);
-        Button startButton = (Button) findViewById(R.id.button_start);
+        mTextViewNotificationTime = (TextView) findViewById(R.id.textViewNotificationTimeValue);
+        mTextViewState = (TextView) findViewById(R.id.textViewStateValue);
+        Button startButton = (Button) findViewById(R.id.buttonStart);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
             }
         });
 
-        Button stopButton = (Button) findViewById(R.id.button_stop);
+        Button stopButton = (Button) findViewById(R.id.buttonStop);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     }
 
     /**
-     *
+     * アラーム設定秒数の設定ダイアログを表示する
+     * ただし、実行中であった場合、その旨のトーストを表示しダイアログは表示しない
      */
     private void showSettingDialog() {
         Log.d(TAG, "showSettingDialog/in");
@@ -166,29 +183,30 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     }
 
     /**
-     *
+     * 画面に表示されている秒数を更新する
      */
     private void updateSecond() {
         Log.d(TAG, "updateSecond/in");
         Resources res = getResources();
         int defaultSecond = res.getInteger(R.integer.second_default);
         mCurrentSecond = SharedPreferencesUtil.readInt(this, SharedPreferencesUtil.KEY_NOTIFICATION_TIME, defaultSecond);
-        mTextViewSecond.setText(getString(R.string.second, mCurrentSecond));
+        mTextViewNotificationTime.setText(getString(R.string.second, mCurrentSecond));
         Log.d(TAG, "updateSecond/out");
     }
 
     /**
-     *
-     * @param isRunning
+     * 画面に表示されているアラーム設定秒数を更新する
+     * @param isRunning アラームが実行中かどうか
      */
     private void updateState(boolean isRunning) {
-        Log.d(TAG, "updateState/in isRunning=" + isRunning);
-
-        int textId = R.string.state_notification_suspended;
+        Log.d(TAG, "updateAndNotifyState/in isRunning=" + isRunning);
+        int textId;
         if (isRunning) {
             textId = R.string.state_notification_executing;
+        } else {
+            textId = R.string.state_notification_suspended;
         }
         mTextViewState.setText(textId);
-        Log.d(TAG, "updateState/out");
+        Log.d(TAG, "updateAndNotifyState/out");
     }
 }

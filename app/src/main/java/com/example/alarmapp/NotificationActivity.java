@@ -7,11 +7,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * アラーム完了通知のアクティビティ
+ */
 public class NotificationActivity extends AppCompatActivity {
     private static final String TAG = NotificationActivity.class.getSimpleName();
+    /**
+     * アラームのアプリケーション
+     */
     private AlarmApplication mApplication;
-    private int mCurrentSecond = 0;
-
+    /**
+     * アラーム設定秒数
+     */
+    private int mCurrentSecond;
+    /**
+     * 画面の各ボタンに設定するリスナー
+     */
     private View.OnClickListener mButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -19,14 +30,14 @@ public class NotificationActivity extends AppCompatActivity {
             mApplication.stopAlarm(NotificationActivity.this);
 
             switch (v.getId()) {
-                case R.id.button_do_not_restart:
+                case R.id.button_do_not_restart:    // 再通知しない
                     // NOP
                     break;
-                case R.id.button_reset:
+                case R.id.button_reset:             // 再設定
                     Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
                     startActivity(intent);
                     break;
-                case R.id.button_restart:
+                case R.id.button_restart:           // 再通知する
                     mApplication.startAlarm(NotificationActivity.this, mCurrentSecond);
                     break;
             }
@@ -54,7 +65,7 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * コンポーネントの初期処理
      */
     private void initComponents() {
         Log.d(TAG, "initComponents/in");

@@ -4,17 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+/**
+ * シェアードプリファレンスを扱うためのUtilクラス
+ */
 public class SharedPreferencesUtil {
     private static final String TAG = SharedPreferencesUtil.class.getSimpleName();
-    private static final String SHARED_PREFERENCES_NAME = "setting_test";
-    static final String KEY_NOTIFICATION_TIME = "notification_time";
+    private static final String SHARED_PREFERENCES_NAME = "setting";
+    public static final String KEY_NOTIFICATION_TIME = "notification_time";
 
     /**
-     *
-     * @param context
-     * @param key
-     * @param value
-     * @return
+     * 整数を書き込む
+     * @param context コンテキスト
+     * @param key その整数のキー
+     * @param value 保存する整数
+     * @return 処理結果
      */
     public static boolean writeInt(Context context, String key, int value) {
         Log.d(TAG, "writeInt/in key=" + key + ", value=" + value);
@@ -30,19 +33,19 @@ public class SharedPreferencesUtil {
         // データ書き込み
         SharedPreferences setting = getSetting(context);
         SharedPreferences.Editor editor = setting.edit();
-        editor.putInt(KEY_NOTIFICATION_TIME, value);
-        // commitは同期（結果あり）。 applyは非同期（結果なし）。
+        editor.putInt(key, value);
+        // commitは同期（結果あり）, applyは非同期（結果なし）
         boolean bRet = editor.commit();
         Log.d(TAG, "writeInt/out result=" + bRet);
         return bRet;
     }
 
     /**
-     *
-     * @param context
-     * @param key
-     * @param defaultValue
-     * @return
+     * 整数を読み出す
+     * @param context コンテキスト
+     * @param key 整数を書き込んだ時に指定したキー
+     * @param defaultValue 読み出し失敗or書き込んだことがない場合に返す整数
+     * @return 読み出した整数
      */
     public static int readInt(Context context, String key, int defaultValue) {
         Log.d(TAG, "readInt/in key=" + key);
@@ -58,15 +61,15 @@ public class SharedPreferencesUtil {
         // データ読み込み
         SharedPreferences setting = getSetting(context);
         // 未書き込みだったらdefaultValueが返ってくる
-        int value = setting.getInt(KEY_NOTIFICATION_TIME, defaultValue);
+        int value = setting.getInt(key, defaultValue);
         Log.d(TAG, "readInt/out result=" + value);
         return value;
     }
 
     /**
-     *
-     * @param context
-     * @return
+     * 専用のSharedPreferencesを取得する
+     * @param context コンテキスト
+     * @return SharedPreferences
      */
     private static SharedPreferences getSetting(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);

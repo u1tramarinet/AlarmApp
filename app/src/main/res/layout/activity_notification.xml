@@ -4,21 +4,26 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:padding="@dimen/margin_common"
     android:orientation="vertical"
     android:elevation="4dp"
-    android:background="@android:color/transparent"
+    android:background="@android:color/white"
     tools:context=".NotificationActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/dialog_title"/>
+        android:layout_marginTop="@dimen/margin_common"
+        android:layout_marginBottom="@dimen/margin_common"
+        android:text="@string/dialog_title"
+        android:textSize="@dimen/font_medium"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_message"/>
+        android:text="@string/dialog_message"
+        android:textSize="@dimen/font_small"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

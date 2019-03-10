@@ -6,11 +6,26 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * アラームのサービス
+ */
 public class AlarmService extends Service {
     private static final String TAG = AlarmService.class.getSimpleName();
+    /**
+     * アラーム設定秒数をIntent経由で受け取るためのキー
+     */
     public static final String KEY_ALARM_SECOND = "alarm_second";
-    private Handler mHandler = new Handler();
+    /**
+     * アラーム設定秒数
+     */
     private int mAlarmSecond;
+    /**
+     * ハンドラー
+     */
+    private Handler mHandler = new Handler();
+    /**
+     * アラームの完了処理を行うランナブル
+     */
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
@@ -18,7 +33,11 @@ public class AlarmService extends Service {
         }
     };
 
+    /**
+     * コンストラクタ
+     */
     public AlarmService() {
+        // NOP
     }
 
     /**
@@ -74,7 +93,7 @@ public class AlarmService extends Service {
     }
 
     /**
-     *
+     * アラーム完了時のダイアログ（Activity）表示を行う
      */
     private void startDialogActivity() {
         Log.d(TAG, "startDialogActivity/in");

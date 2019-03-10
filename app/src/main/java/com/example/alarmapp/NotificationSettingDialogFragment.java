@@ -11,14 +11,28 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+/**
+ * アラームの秒数を設定するダイアログ
+ */
 public class NotificationSettingDialogFragment extends DialogFragment {
     private static final String TAG = NotificationSettingDialogFragment.class.getSimpleName();
-    private DialogActionListener mListener = null;
-    private int[] mSeconds = null;
-    private int mCurrentSecond;
-
     /**
+     * このダイアログのリスナー
      *
+     * 呼び出し元での継承が必須
+     * このダイアログでの特定のイベントを呼び出し元に伝えることができる
+     */
+    private DialogActionListener mListener = null;
+    /**
+     * アラーム設定秒数の一覧
+     */
+    private int[] mSeconds = null;
+    /**
+     * 現在のアラーム設定秒数
+     */
+    private int mCurrentSecond;
+    /**
+     * ダイアログのボタンのリスナー
      */
     private DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
         @Override
@@ -39,8 +53,8 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     };
 
     /**
-     *
-     * @return
+     * ダイアログのインスタンスを取得する
+     * @return ダイアログのインスタンス
      */
     public static NotificationSettingDialogFragment newInstance() {
         Log.d(TAG, "newInstance");
@@ -54,6 +68,8 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         Log.d(TAG, "onAttach/in");
         super.onAttach(context);
+        // 呼び出し元でリスナーが継承されていることを確認
+        // リスナー経由で呼び出し元とやりとりするため
         try {
             mListener = (DialogActionListener) context;
         } catch (ClassCastException e) {
@@ -90,7 +106,7 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     }
 
     /**
-     *
+     * 初期処理
      */
     private void initialize() {
         Log.d(TAG, "initialize/in");
@@ -102,8 +118,8 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     }
 
     /**
-     *
-     * @return
+     * 秒数のリストからリストアイテムのタイトルを取得する
+     * @return リストアイテムのタイトル一覧
      */
     private CharSequence[] getItemsFromSeconds() {
         Log.d(TAG, "getItemsFromSeconds");
@@ -115,8 +131,8 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     }
 
     /**
-     *
-     * @return
+     * 現在のアラーム設定秒数から、選択されているリストアイテムを見つける
+     * @return 選択されているリストアイテムのインデックス
      */
     private int getCheckedItemFromCurrentSecond() {
         Log.d(TAG, "getCheckedItemFromCurrentSecond");
@@ -131,9 +147,12 @@ public class NotificationSettingDialogFragment extends DialogFragment {
     }
 
     /**
-     *
+     * 呼び出し元とやりとりするためのリスナー
      */
     public interface DialogActionListener {
+        /**
+         * OKボタンが押されたとき
+         */
         void onDialogPositiveClick();
     }
 }

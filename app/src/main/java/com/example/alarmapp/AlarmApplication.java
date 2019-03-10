@@ -12,56 +12,65 @@ import com.example.alarmapp.state.IdleState;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * アラームのアプリケーション
+ */
 public class AlarmApplication extends Application {
     private static final String TAG = AlarmApplication.class.getSimpleName();
+    /**
+     * このアプリケーションにて、アラームの状態を保持する
+     */
     private AlarmState mState = IdleState.getInstance();
+    /**
+     * オブザーバリスト
+     */
     private List<AlarmStateObserver> observers = new ArrayList<>();
 
     /**
-     *
-     * @param context
-     * @param sec
+     * アラームを開始する
+     * @param context AlarmStateに渡すコンテキスト
+     * @param sec アラーム設定秒数
      */
     public void startAlarm(Context context, int sec) {
         Log.d(TAG, "startAlarm/in");
         mState.start(context, sec);
-        updateState(ExecutingState.getInstance());
+        updateAndNotifyState(ExecutingState.getInstance());
         Log.d(TAG, "startAlarm/out");
     }
 
     /**
-     *
-     * @param context
+     * アラームを中止する
+     * @param context AlarmStateに渡すコンテキスト
      */
     public void stopAlarm(Context context) {
         Log.d(TAG, "stopAlarm/in");
         mState.stop(context);
-        updateState(IdleState.getInstance());
+        updateAndNotifyState(IdleState.getInstance());
         Log.d(TAG, "stopAlarm/out");
     }
 
     /**
-     *
-     * @param state
+     * 状態を更新する
+     * @param state 更新後の状態
      */
-    public void updateState(AlarmState state) {
-        Log.d(TAG, "updateState/in old=" + mState + "-> new=" + state);
+    public void updateAndNotifyState(AlarmState state) {
+        Log.d(TAG, "updateAndNotifyState/in old=" + mState + "-> new=" + state);
         mState = state;
         notifyObservers();
-        Log.d(TAG, "updateState/out");
+        Log.d(TAG, "updateAndNotifyState/out");
     }
 
     /**
-     *
-     * @return
+     * アラーム秒数の設定の画面（ダイアログ）を表示できるかどうか
+     * @return true:表示できる, false:表示できない
      */
     public boolean canOpenSetting() {
-        Log.d(TAG, "canOpenSetting enabled=" + mState.canOpenSetting());
-        return mState.canOpenSetting();
+        Log.d(TAG, "canOpenSetting enabled=" + !mState.isRunning());
+        return !mState.isRunning();
     }
 
     /**
-     *
+     * 登録されたオブザーバにアラームの状態の更新を通知する
      */
     public void notifyObservers() {
         Log.d(TAG, "notifyObservers/in");
@@ -72,8 +81,8 @@ public class AlarmApplication extends Application {
     }
 
     /**
-     *
-     * @param observer
+     * オブザーバを追加する
+     * @param observer 追加するオブザーバ
      */
     public void addObserver(AlarmStateObserver observer) {
         Log.d(TAG, "addObserver/in");
@@ -83,8 +92,8 @@ public class AlarmApplication extends Application {
     }
 
     /**
-     *
-     * @param observer
+     * オブザーバを削除する
+     * @param observer 削除するオブザーバ
      */
     public void removeObserver(AlarmStateObserver observer) {
         Log.d(TAG, "removeObserver/in");
