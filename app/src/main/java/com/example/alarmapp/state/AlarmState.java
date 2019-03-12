@@ -1,6 +1,6 @@
 package com.example.alarmapp.state;
 
-import android.content.Context;
+import com.example.alarmapp.activity.AlarmActivity;
 
 /**
  * アラームの状態ごとの動作を定義するための型（インターフェース）
@@ -16,13 +16,13 @@ public interface AlarmState {
      * @param context Service開始などの実際の処理を行うためのコンテキスト
      * @param sec アラーム設定秒数
      */
-    void start(Context context, int sec);
+    void start(AlarmActivity context, int sec);
 
     /**
      * アラームを中止する
      * @param context Service終了などの実際の処理を行うためのコンテキスト
      */
-    void stop(Context context);
+    void stop(AlarmActivity context);
 
     /**
      * アラームが実行中かどうか

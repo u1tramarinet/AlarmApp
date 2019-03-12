@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="@dimen/margin_common"
-    android:orientation="vertical"
-    android:elevation="4dp"
+    android:paddingStart="@dimen/padding_small"
+    android:paddingLeft="@dimen/padding_small"
+    android:paddingEnd="@dimen/padding_small"
+    android:paddingRight="@dimen/padding_small"
     android:background="@android:color/white"
-    tools:context=".NotificationActivity">
+    android:elevation="4dp"
+    tools:context=".activity.NotificationActivity">
 
     <TextView
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_common"
-        android:layout_marginBottom="@dimen/margin_common"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
         android:text="@string/dialog_title"
-        android:textSize="@dimen/font_medium"/>
+        android:textSize="@dimen/font_medium"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewMessage"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
         android:text="@string/dialog_message"
-        android:textSize="@dimen/font_small"/>
+        android:textSize="@dimen/font_small"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDoNotRestart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-    <LinearLayout
+
+    <Button
+        android:id="@+id/buttonDoNotRestart"
+        style="?buttonBarButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@android:color/transparent"
+        android:text="@string/do_not_re_notify"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonReset"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMessage" />
 
-        <Button
-            android:id="@+id/button_do_not_restart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/do_not_re_notify"
-            style="?buttonBarButtonStyle"/>
+    <Button
+        android:id="@+id/buttonReset"
+        style="?buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="@string/resetting"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonDoNotRestart"
+        app:layout_constraintEnd_toStartOf="@+id/buttonRestart"
+        app:layout_constraintStart_toEndOf="@+id/buttonDoNotRestart" />
 
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/resetting"
-            style="?buttonBarButtonStyle"/>
+    <Button
+        android:id="@+id/buttonRestart"
+        style="?buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="@string/re_notify"
+        app:layout_constraintBaseline_toBaselineOf="@+id/buttonReset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonReset" />
 
-        <Button
-            android:id="@+id/button_restart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/re_notify"
-            style="?buttonBarButtonStyle"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

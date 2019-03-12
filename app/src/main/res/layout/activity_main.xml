@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -30,7 +29,6 @@
         android:textSize="@dimen/font_large"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/buttonStart" />
-
 
     <TextView
         android:id="@+id/textViewNotificationTime"
@@ -56,13 +54,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-
     <TextView
         android:id="@+id/textViewStateTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
         android:text="@string/state"
         android:textSize="@dimen/font_medium"
         app:layout_constraintStart_toStartOf="@id/textViewNotificationTime"
@@ -73,45 +70,31 @@
         android:id="@+id/textViewStateValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/state_notification_suspended"
         android:textSize="@dimen/font_medium"
         app:layout_constraintTop_toBottomOf="@+id/textViewNotificationTimeValue"
         app:layout_constraintEnd_toEndOf="@id/textViewNotificationTimeValue" />
 
-
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/selector_button_background"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/notification_start"
-        android:textSize="@dimen/font_small"
-        android:textColor="@android:color/white"
         app:layout_constraintEnd_toStartOf="@+id/buttonStop"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewStateTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewStateTitle"
+        style="@style/MainButtonTheme"/>
 
     <Button
         android:id="@+id/buttonStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_button_background"
-        android:paddingStart="@dimen/padding_horizontal"
-        android:paddingEnd="@dimen/padding_horizontal"
         android:text="@string/notification_stop"
-        android:textSize="@dimen/font_small"
-        android:textColor="@android:color/white"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonStart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonStart" />
+        app:layout_constraintStart_toEndOf="@+id/buttonStart"
+        style="@style/MainButtonTheme"/>
 
 </android.support.constraint.ConstraintLayout>

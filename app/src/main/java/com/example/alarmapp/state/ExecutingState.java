@@ -1,12 +1,8 @@
 package com.example.alarmapp.state;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.alarmapp.AlarmService;
-import com.example.alarmapp.R;
+import com.example.alarmapp.activity.AlarmActivity;
 
 /**
  * アラームが実行中である状態
@@ -39,19 +35,19 @@ public class ExecutingState implements AlarmState {
      * {@inheritDoc}
      */
     @Override
-    public void start(Context context, int sec) {
-        Log.d(TAG, "start NOP now=" + singleton);
+    public void start(AlarmActivity context, int sec) {
+        Log.d(TAG, "start/in");
         // NOP
+        Log.d(TAG, "start/out");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void stop(Context context) {
+    public void stop(AlarmActivity context) {
         Log.d(TAG, "stop/in");
-        Intent intent = new Intent(context, AlarmService.class);
-        context.stopService(intent);
+        context.stopAlarm();
         Log.d(TAG, "stop/out");
     }
 

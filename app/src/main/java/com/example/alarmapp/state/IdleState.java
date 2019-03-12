@@ -1,10 +1,8 @@
 package com.example.alarmapp.state;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.alarmapp.AlarmService;
+import com.example.alarmapp.activity.AlarmActivity;
 
 /**
  * アラームが停止中である状態
@@ -33,11 +31,9 @@ public class IdleState implements AlarmState {
      * {@inheritDoc}
      */
     @Override
-    public void start(Context context, int sec) {
+    public void start(AlarmActivity context, int sec) {
         Log.d(TAG, "start/in");
-        Intent intent = new Intent(context, AlarmService.class);
-        intent.putExtra(AlarmService.KEY_ALARM_SECOND, sec);
-        context.startService(intent);
+        context.startAlarm(sec);
         Log.d(TAG, "start/out");
     }
 
@@ -45,7 +41,7 @@ public class IdleState implements AlarmState {
      * {@inheritDoc}
      */
     @Override
-    public void stop(Context context) {
+    public void stop(AlarmActivity context) {
         Log.d(TAG, "stop/in");
         // NOP
         Log.d(TAG, "stop/out");

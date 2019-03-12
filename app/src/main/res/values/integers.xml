@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- デフォルトの通知秒数 -->
     <integer name="second_default">60</integer>
+
+    <!-- 通知時間の候補：ここで選択肢を増やすことができる -->
     <integer-array name="seconds">
         <item>10</item>
         <item>30</item>

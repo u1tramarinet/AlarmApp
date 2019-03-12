@@ -9,7 +9,13 @@ import android.util.Log;
  */
 public class SharedPreferencesUtil {
     private static final String TAG = SharedPreferencesUtil.class.getSimpleName();
+    /**
+     * シェアードプリファレンスを識別
+     */
     private static final String SHARED_PREFERENCES_NAME = "setting";
+    /**
+     * 通知時間を書き込み/読み出しのためのキー
+     */
     public static final String KEY_NOTIFICATION_TIME = "notification_time";
 
     /**

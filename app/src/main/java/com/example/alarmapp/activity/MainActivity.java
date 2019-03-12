@@ -1,8 +1,7 @@
-package com.example.alarmapp;
+package com.example.alarmapp.activity;
 
 import android.content.res.Resources;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,13 +13,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alarmapp.AlarmApplication;
+import com.example.alarmapp.NotificationSettingDialogFragment;
+import com.example.alarmapp.R;
+import com.example.alarmapp.SharedPreferencesUtil;
 import com.example.alarmapp.observer.AlarmStateObserver;
 import com.example.alarmapp.state.AlarmState;
 
 /**
  * メインアクティビティ
  */
-public class MainActivity extends AppCompatActivity implements NotificationSettingDialogFragment.DialogActionListener {
+public class MainActivity extends AlarmActivity
+        implements NotificationSettingDialogFragment.DialogActionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     /**
      * アラーム設定秒数
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
     protected void onDestroy() {
         Log.d(TAG, "onDestroy/in");
         super.onDestroy();
-        // NOP
+        mApplication.requestStop((AlarmActivity) this);
         Log.d(TAG, "onDestroy/out");
     }
 
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onStartClick/in");
-                mApplication.startAlarm(MainActivity.this, mCurrentSecond);
+                mApplication.requestStart((AlarmActivity) MainActivity.this, mCurrentSecond);
                 Log.d(TAG, "onStartClick/out");
             }
         });
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NotificationSetti
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onStopClick/in");
-                mApplication.stopAlarm(MainActivity.this);
+                mApplication.requestStop((AlarmActivity) MainActivity.this);
                 Log.d(TAG, "onStopClick/out");
             }
         });

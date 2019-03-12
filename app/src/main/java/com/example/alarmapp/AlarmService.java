@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.alarmapp.activity.NotificationActivity;
+
 /**
  * アラームのサービス
  */
@@ -20,11 +22,11 @@ public class AlarmService extends Service {
      */
     private int mAlarmSecond;
     /**
-     * ハンドラー
+     * Handler
      */
     private Handler mHandler = new Handler();
     /**
-     * アラームの完了処理を行うランナブル
+     * アラームの完了処理を行うRunnable
      */
     private Runnable mRunnable = new Runnable() {
         @Override

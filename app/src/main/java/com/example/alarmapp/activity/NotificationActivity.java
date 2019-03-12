@@ -1,16 +1,19 @@
-package com.example.alarmapp;
+package com.example.alarmapp.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.alarmapp.AlarmApplication;
+import com.example.alarmapp.AlarmService;
+import com.example.alarmapp.R;
+
 /**
  * アラーム完了通知のアクティビティ
  */
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AlarmActivity {
     private static final String TAG = NotificationActivity.class.getSimpleName();
     /**
      * アラームのアプリケーション
@@ -27,18 +30,18 @@ public class NotificationActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick/in");
-            mApplication.stopAlarm(NotificationActivity.this);
+            mApplication.requestStop((AlarmActivity) NotificationActivity.this);
 
             switch (v.getId()) {
-                case R.id.button_do_not_restart:    // 再通知しない
+                case R.id.buttonDoNotRestart:    // 再通知しない
                     // NOP
                     break;
-                case R.id.button_reset:             // 再設定
+                case R.id.buttonReset:             // 再設定
                     Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
                     startActivity(intent);
                     break;
-                case R.id.button_restart:           // 再通知する
-                    mApplication.startAlarm(NotificationActivity.this, mCurrentSecond);
+                case R.id.buttonRestart:           // 再通知する
+                    mApplication.requestStart(NotificationActivity.this, mCurrentSecond);
                     break;
             }
             finish();
@@ -69,13 +72,13 @@ public class NotificationActivity extends AppCompatActivity {
      */
     private void initComponents() {
         Log.d(TAG, "initComponents/in");
-        Button cancelButton = (Button) findViewById(R.id.button_do_not_restart);
+        Button cancelButton = (Button) findViewById(R.id.buttonDoNotRestart);
         cancelButton.setOnClickListener(mButtonClickListener);
 
-        Button resetButton = (Button) findViewById(R.id.button_reset);
+        Button resetButton = (Button) findViewById(R.id.buttonReset);
         resetButton.setOnClickListener(mButtonClickListener);
 
-        Button restartButton = (Button) findViewById(R.id.button_restart);
+        Button restartButton = (Button) findViewById(R.id.buttonRestart);
         restartButton.setOnClickListener(mButtonClickListener);
         Log.d(TAG, "initComponents/out");
     }

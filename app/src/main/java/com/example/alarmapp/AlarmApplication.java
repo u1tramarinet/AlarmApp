@@ -1,9 +1,9 @@
 package com.example.alarmapp;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
+import com.example.alarmapp.activity.AlarmActivity;
 import com.example.alarmapp.observer.AlarmStateObserver;
 import com.example.alarmapp.state.AlarmState;
 import com.example.alarmapp.state.ExecutingState;
@@ -31,33 +31,22 @@ public class AlarmApplication extends Application {
      * @param context AlarmStateに渡すコンテキスト
      * @param sec アラーム設定秒数
      */
-    public void startAlarm(Context context, int sec) {
-        Log.d(TAG, "startAlarm/in");
+    public void requestStart(AlarmActivity context, int sec) {
+        Log.d(TAG, "requestStart/in");
         mState.start(context, sec);
         updateAndNotifyState(ExecutingState.getInstance());
-        Log.d(TAG, "startAlarm/out");
+        Log.d(TAG, "requestStart/out");
     }
 
     /**
      * アラームを中止する
      * @param context AlarmStateに渡すコンテキスト
      */
-    public void stopAlarm(Context context) {
-        Log.d(TAG, "stopAlarm/in");
+    public void requestStop(AlarmActivity context) {
+        Log.d(TAG, "requestStop/in");
         mState.stop(context);
         updateAndNotifyState(IdleState.getInstance());
-        Log.d(TAG, "stopAlarm/out");
-    }
-
-    /**
-     * 状態を更新する
-     * @param state 更新後の状態
-     */
-    public void updateAndNotifyState(AlarmState state) {
-        Log.d(TAG, "updateAndNotifyState/in old=" + mState + "-> new=" + state);
-        mState = state;
-        notifyObservers();
-        Log.d(TAG, "updateAndNotifyState/out");
+        Log.d(TAG, "requestStop/out");
     }
 
     /**
@@ -67,17 +56,6 @@ public class AlarmApplication extends Application {
     public boolean canOpenSetting() {
         Log.d(TAG, "canOpenSetting enabled=" + !mState.isRunning());
         return !mState.isRunning();
-    }
-
-    /**
-     * 登録されたオブザーバにアラームの状態の更新を通知する
-     */
-    public void notifyObservers() {
-        Log.d(TAG, "notifyObservers/in");
-        for (AlarmStateObserver observer : observers) {
-            observer.update(mState);
-        }
-        Log.d(TAG, "notifyObservers/out");
     }
 
     /**
@@ -99,5 +77,27 @@ public class AlarmApplication extends Application {
         Log.d(TAG, "removeObserver/in");
         observers.remove(observer);
         Log.d(TAG, "removeObserver/out");
+    }
+
+    /**
+     * 状態を更新する
+     * @param state 更新後の状態
+     */
+    private void updateAndNotifyState(AlarmState state) {
+        Log.d(TAG, "updateAndNotifyState/in old=" + mState + "-> new=" + state);
+        mState = state;
+        notifyObservers();
+        Log.d(TAG, "updateAndNotifyState/out");
+    }
+
+    /**
+     * 登録されたオブザーバにアラームの状態の更新を通知する
+     */
+    private void notifyObservers() {
+        Log.d(TAG, "notifyObservers/in");
+        for (AlarmStateObserver observer : observers) {
+            observer.update(mState);
+        }
+        Log.d(TAG, "notifyObservers/out");
     }
 }
